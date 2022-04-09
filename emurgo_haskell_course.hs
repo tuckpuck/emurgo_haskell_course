@@ -82,3 +82,58 @@ listLength :: [a] -> Int
 listLength [] = 0
 listLength (x:xs) = 1 + listLength xs
 
+
+
+---- Custom Data Types ----
+bar :: Int
+bar = 10
+
+fun :: Int -> Int
+fun x = x * 10
+
+-- Create our own data types. The item before the equals are type constructors. The items after the equals are data constructors. 
+data Mood = Sad | Happy | Angry deriving (Show)
+
+sad :: Mood
+sad = Sad
+
+hap :: Mood
+hap = Happy
+
+
+data Temperature = C Float | F Float deriving Eq 
+
+-- In this case, BinaryTree is given as a second type for Node. Meaning that it is recursive. 
+data BinaryTree = Leaf Int | Node Int BinaryTree deriving Show
+
+myTree :: BinaryTree
+-- In this example you can see the recursion of the type definition which allows you to continue passing values. 
+myTree = Node 10 (Node 11 (Leaf 12))
+
+data Student = Student String Int Float deriving Show
+auxName :: Student -> String
+auxName (Student x y z) = x
+john = Student "John" 17 9
+johnName = auxName john 
+
+-- Structure notation gives auxiliary functions to map and extract values. 
+data Student' = Student' {
+name' :: String,
+age :: Int,
+grade :: Float
+} deriving Show
+
+tucker = Student' "Tucker" 29 12
+tuckerGrade = grade tucker
+
+-- Blockchain
+type CBHash = Int
+
+data Blockchain = Genesis CBHash | Block CBHash Blockchain deriving Show 
+gen = Genesis 0
+ 
+firstSt  = gen
+secondSt = Block 1 firstSt 
+thirdSt  = Block 2 secondSt
+fourthSt  = Block 3 thirdSt
+fifthSt  = Block 4 (Block 3 (Block 2 (Block 1 (Genesis 0))))
