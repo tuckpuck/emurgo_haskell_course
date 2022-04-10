@@ -160,3 +160,60 @@ move West (x,y) = (x-1, y)
 -- curringEx (Int Int Int) (Int)
 -- (Int Int) (Int)
 -- (Int) (Int)
+
+---- Recursion ----
+numList :: [Int]
+numList = [1..22]
+
+length' :: [a] -> Int
+length' [] = 0
+length' list = 1 + length (tail list)
+
+findLength = length' numList
+findStrLength = length' "Hello"
+
+length'' :: [a] -> Int
+length'' [] = 0
+length'' (x:xs) = 1 + length'' xs
+
+sum' :: [Int] -> Int
+sum' [] = 0
+sum' (x:xs) = x + sum' xs
+
+-- Special pattern to split lists
+specialSum :: [Int] -> Int
+specialSum [] = 0
+specialSum [x] = x
+-- specialSum 
+specialSum (x:y:zs) = y
+
+-- Create a function that takes the sum of every two numbers in a list
+sumOf2 :: [Int] -> [Int]
+sumOf2 [] = []
+sumOf2 [x] = [x]
+sumOf2 (x:y:zs) = x + y : sumOf2 zs
+
+example1 = sumOf2 [1]
+example2 = sumOf2 [1,2]
+example3 = sumOf2 [1..50]
+
+
+-- Concatenation operators
+-- a : [a]
+-- [a] ++ [a]
+listOf10 = (:) 1 [2..10]
+listOf20 = (++) [1..10][2..20]
+oneList = (:) 1 []
+
+
+-- Recursive function to add two to all
+-- (Int->Int) in this case is a function
+applyToAll :: (Int -> Int) -> [Int] -> [Int]
+applyToAll _ [] = []
+applyToAll f (x:xs) = (f x) : applyToAll f xs
+
+addTwo = applyToAll (+2) [2,3,4,5]
+
+multiplyByTwo = applyToAll (*2) [2,3,4,5]
+
+-- When you see the type definition like (Int -> Int) it means it is expecting a function to be passed in. 
