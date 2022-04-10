@@ -137,3 +137,26 @@ secondSt = Block 1 firstSt
 thirdSt  = Block 2 secondSt
 fourthSt  = Block 3 thirdSt
 fifthSt  = Block 4 (Block 3 (Block 2 (Block 1 (Genesis 0))))
+
+
+-- An example of a type alias
+type ComplicatedTypeDef= Int-> Float -> Float-> Char-> Integer -> Bool
+myCompDataType :: ComplicatedTypeDef
+myCompDataType a b c d e = True
+
+type Pos = (Int, Int)
+type StateChange = Pos -> Pos
+
+data Move = North | South | East | West
+
+move :: Move -> StateChange
+move North (x,y) = (x,y+1)
+move South (x,y) = (x,y-1)
+move East (x,y) = (x+1, y)
+move West (x,y) = (x-1, y)
+
+
+-- How currying works within a function
+-- curringEx (Int Int Int) (Int)
+-- (Int Int) (Int)
+-- (Int) (Int)
