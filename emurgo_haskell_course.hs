@@ -217,3 +217,54 @@ addTwo = applyToAll (+2) [2,3,4,5]
 multiplyByTwo = applyToAll (*2) [2,3,4,5]
 
 -- When you see the type definition like (Int -> Int) it means it is expecting a function to be passed in. 
+
+-- Reduction or evaluation is where the operations are calculated down to a single value in order. 
+
+-- Array concatenation operators
+-- a : [a]
+-- [a] ++ [a] 
+
+-- Anonymous functions can be written instead of defined functions, for flexability, when a function will only be used once
+increment :: Int -> Int
+increment x = (\x -> x + 1) x
+testIncrement = increment 10 
+
+-- Factorials
+factorial :: Int -> Int
+factorial 0 = 1
+factorial x = x * factorial (x - 1)
+
+-- Same as above, written with guards
+factorial' :: Int -> Int
+factorial' n | n == 0 = 1
+  | otherwise = n * factorial' (n-1)
+
+-- Setting up a custom data type
+data Health = Healthy | Sick deriving (Show)
+data Temperature = C Int deriving (Show)
+temps :: [Temperature]
+temps = [C 36, C 37, C 38, C 39, C 40]
+
+-- Make a recursive function using two custom data types
+areYouSick :: [Temperature] -> [Health]
+areYouSick [] = []
+areYouSick ((C y):xs) = (if y >= 35 && y <= 36 
+                         then Healthy 
+                         else Sick) : areYouSick xs
+
+data Grades = Grade Int Char deriving Show
+
+grades :: [Grades]
+grades = [Grade 65 'D', Grade 72 'C' , Grade 84 'B', Grade 96 'A']
+
+calcGPA :: [Grades] -> Int
+calcGPA [] = 0
+-- Lst@ is notation for the whole provided list
+calcGPA lst = (sumGrades lst) `div` (length lst)
+
+sumGrades :: [Grades] -> Int
+sumGrades [] = 0
+sumGrades ((Grade num ltr):xs) = num + sumGrades xs
+
+-- Where implies that everything after the where will be within that scope. 
+
