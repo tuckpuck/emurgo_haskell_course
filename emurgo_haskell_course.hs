@@ -268,3 +268,44 @@ sumGrades ((Grade num ltr):xs) = num + sumGrades xs
 
 -- Where implies that everything after the where will be within that scope. 
 
+
+
+-- Execute transformations in a credit card number
+checkDigit :: [Int] -> Int
+checkDigit [x] = x
+checkDigit (x:xs) = checkDigit(xs)
+
+dropLast :: [Int] -> [Int]
+dropLast [x] = []
+dropLast (x:xs) = x : dropLast xs
+
+reverse' :: [Int] -> [Int]
+reverse' [] = [] 
+reverse' (x:xs) = reverse' xs ++ [x]
+
+doubleEachOdd :: [Int] -> [Int]
+doubleEachOdd [] = [] 
+doubleEachOdd [x] = [x*2] 
+doubleEachOdd (x:y:zs) = x*2:y:doubleEachOdd zs 
+
+subtract9 :: [Int] -> [Int]
+subtract9 [] = []
+subtract9 (x:xs) 
+  | x > 9 = x - 9 : subtract9 xs
+  | otherwise = x : subtract9 xs
+
+
+cc = [6,0,3,3,9,5,2,0,5,6,3,3,4,1,6,9]
+step1 = dropLast cc
+step2 = reverse' step1
+step3 = doubleEachOdd step2
+step4 = subtract9 step3
+
+
+-- List aux functions to know
+-- head, tail, take, map, filter, zip, takeWhile, !!, elem
+-- !! acts as an index 
+-- best practice is often to create a safe version of the function
+-- ex. native head function does not handle empty list [] as an input
+-- Instead it will throw an exception.
+-- A total function will handle all cases
