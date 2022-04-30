@@ -309,3 +309,56 @@ step4 = subtract9 step3
 -- ex. native head function does not handle empty list [] as an input
 -- Instead it will throw an exception.
 -- A total function will handle all cases
+
+
+-- Higher order functions are functions that take a function as an input
+-- To show this is a function in the type signature, you should add (), ex. (Int -> Int)
+twice :: (Int -> Int) -> Int -> Int
+twice f x = f (f x)
+testTwice = twice (+3) 4
+
+divideBy :: Int -> Int -> Int
+divideBy a b = a `div` b
+
+performOp :: (Int -> Int) -> Int -> Int -> Int
+performOp f x y = y * (f x)
+
+map' :: (a -> b) -> [a] -> [b]
+map' _ [] = [] 
+map' f (x:xs) = f x : map f xs 
+mapNums = map' (+10) [1,2,3,4]
+mapStrings = map' reverse ["hello", "good morning"]
+
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' f (x:xs)
+  | f x = x : filter' f xs
+  | otherwise = filter' f xs 
+
+sum' :: [Int] -> Int
+sum' [] = 0
+sum' (x:xs) = x + sum xs
+
+myFoldr :: (a -> b -> b) -> b -> [a] -> b 
+myFoldr _ nil [] = nil
+myFoldr f nil (x:xs) = f x (myFoldr f nil xs)
+
+-- This is an example of creating a partial function using currying
+sum'' = myFoldr (+) 0
+testSum = sum'' [1,2,3]
+
+-- Let notation
+aaa x = let y = x + 3
+            z = x + 2
+        in y + z 
+testAaa = aaa 100
+
+--  Where notation
+mathFunctionWhere :: Int -> Int -> Int -> Int
+mathFunctionWhere a b c = diff1 + diff2 + prod + a
+  where
+    diff1 = c - a
+    diff2 = b - a
+    prod = a * b * c
+
+testWhere = mathFunctionWhere 10 20 30
