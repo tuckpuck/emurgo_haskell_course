@@ -435,3 +435,16 @@ myLtrCount [] _ = 0
 myLtrCount (x:xs) ltr
   | x == ltr = 1 + (myLtrCount xs ltr)
   | otherwise = 0 + (myLtrCount xs ltr)
+
+
+myLength = myFoldr (\ x r -> 1 + r) 0
+
+myMap :: (a -> b) -> [a] -> [b]
+myMap f list = foldr (\x xs -> f x : xs) [] list
+
+-- id is the identity function.
+-- It is a function that always returns the value that was used as its argument, unchanged
+-- In this case is used to mean 'dont do anything and continue evaluating'
+
+myFilter :: (a -> Bool) -> [a] -> [a]
+myFilter f list = foldr (\x -> if (f x) then (x:) else id) [] list
