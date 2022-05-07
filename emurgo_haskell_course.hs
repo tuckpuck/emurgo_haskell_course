@@ -230,20 +230,20 @@ increment x = (\x -> x + 1) x
 testIncrement = increment 10 
 
 -- Factorials
-factorial :: Int -> Int
-factorial 0 = 1
-factorial x = x * factorial (x - 1)
+factorial'''' :: Int -> Int
+factorial'''' 0 = 1
+factorial'''' x = x * factorial'''' (x - 1)
 
 -- Same as above, written with guards
-factorial' :: Int -> Int
-factorial' n | n == 0 = 1
-  | otherwise = n * factorial' (n-1)
+factorial''''' :: Int -> Int
+factorial''''' n | n == 0 = 1
+  | otherwise = n * factorial''''' (n-1)
 
 -- Setting up a custom data type
 data Health = Healthy | Sick deriving (Show)
-data Temperature = C Int deriving (Show)
-temps :: [Temperature]
-temps = [C 36, C 37, C 38, C 39, C 40]
+data Temperature' = C' Int deriving (Show)
+temps :: [Temperature']
+temps = [C' 36, C' 37, C' 38, C' 39, C' 40]
 
 -- Make a recursive function using two custom data types
 areYouSick :: [Temperature] -> [Health]
@@ -335,17 +335,17 @@ filter' f (x:xs)
   | f x = x : filter' f xs
   | otherwise = filter' f xs 
 
-sum' :: [Int] -> Int
-sum' [] = 0
-sum' (x:xs) = x + sum xs
+sum'' :: [Int] -> Int
+sum'' [] = 0
+sum'' (x:xs) = x + sum xs
 
 myFoldr :: (a -> b -> b) -> b -> [a] -> b 
 myFoldr _ nil [] = nil
 myFoldr f nil (x:xs) = f x (myFoldr f nil xs)
 
 -- This is an example of creating a partial function using currying
-sum'' = myFoldr (+) 0
-testSum = sum'' [1,2,3]
+sum''' = myFoldr (+) 0
+testSum = sum''' [1,2,3]
 
 -- Let notation
 aaa x = let y = x + 3
@@ -362,3 +362,76 @@ mathFunctionWhere a b c = diff1 + diff2 + prod + a
     prod = a * b * c
 
 testWhere = mathFunctionWhere 10 20 30
+
+-- HW1
+
+--1. Fix the Types -- Asume that the functions implementations are CORRECT, just fix the type definition needed for them to run, feel free to test on the REPL
+fixMe1 :: Integer -> Integer -> Bool   
+fixMe1 n m
+  | n >= m    = True
+  | otherwise = True
+
+fixMe2 :: Double -> Double -> String     
+fixMe2 n m = if n / m > 10  then "A-F" else "0-9"
+
+abc = [1..11]
+fixMe3 :: [Integer] -> Integer
+fixMe3 [] = 0
+fixMe3 (x:xs) = x + fixMe3 xs
+
+fixMe4 ::  [Char] -> [Char] -> String
+fixMe4 fName lName = lName ++ ", " ++ fName
+
+
+--Recursion and Polymorphism
+scoresT :: Fractional a => [a]
+scoresT = [74,85,81,98,69.99,78,87,93]
+
+myDlength :: Fractional a => [a] -> a
+myDlength [] = 0
+myDlength (x:xs) = 1 + myDlength (xs)  
+
+fixMe5 :: (Ord a,Fractional a) => ([a] -> a) -> ([a] -> a) -> [a] -> Char
+fixMe5 myOper myLen lst
+  | (myOper lst)/(myLen lst)  > 90.99   = 'A'
+  | (myOper lst)/(myLen lst)  > 80.99   = 'B'
+  | (myOper lst)/(myLen lst)  > 70.99   = 'C'
+  | otherwise                           = 'F'
+-- Test it on your repl:
+-- fixMe5 sum myDlength scoresT
+-- The answer should be 'B'
+
+
+-- 2. Define the base case
+beginsWith :: Char -> String -> Bool
+beginsWith _ [] = False
+beginsWith c (x:xs)   = c == x
+
+
+{- 3. Create a function all' that takes 2 inputs, (1st) a comparison operation(>,>=,<,<=,==) to any member of (2nd) a list,
+--    and output True if all elements of the functions comply, False if any of the elemnts doesn't, WITHOUT using map
+-}
+-- Original answer
+-- all' :: (Ord a) => (a -> a -> Bool) -> [a] -> Bool
+-- all' _ [] = False
+-- all' _ [_] = False
+-- all' comp (x:y:xs) = x `comp` y
+-- Can't fully figure this one out 
+
+all' :: (Ord a) => (a -> Bool) -> [a] -> Bool
+all' p  [] = True
+all' p (x:xs)
+  | p x = all' p xs
+  | otherwise = False
+
+
+-- Given a Word and a letter (case sensitive), create function that count the number of times that letter shows up in the word
+countHowManyTimesLetterIsInWord :: Char -> [Char] -> Int
+countHowManyTimesLetterIsInWord _ [] = 0
+countHowManyTimesLetterIsInWord c st = length (filter (==c) st)
+
+myLtrCount :: String -> Char -> Int
+myLtrCount [] _ = 0
+myLtrCount (x:xs) ltr
+  | x == ltr = 1 + (myLtrCount xs ltr)
+  | otherwise = 0 + (myLtrCount xs ltr)
