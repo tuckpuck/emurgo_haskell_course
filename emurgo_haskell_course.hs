@@ -448,3 +448,46 @@ myMap f list = foldr (\x xs -> f x : xs) [] list
 
 myFilter :: (a -> Bool) -> [a] -> [a]
 myFilter f list = foldr (\x -> if (f x) then (x:) else id) [] list
+
+
+greaterThan2 :: Int -> [Bool] -> [Bool]
+greaterThan2 y z = ((>2) y) : z
+
+testFoldr = foldr greaterThan2 [] [1..5]
+
+-- Steps when coding haskell
+-- Analyse the problem
+-- Divide and Conquer: Divide in smaller problems if possible
+-- Consider the types
+-- Consider the process (the evaluation process..)
+-- Consider the identities and basecases
+-- Consider the inputs
+-- Code your functions
+
+-- To find info on a type class, use :i 
+-- Type classes define a set of features
+-- When you define something in a type class, you can use that set of features
+myEqual :: Eq a => a -> a -> Bool
+myEqual first second = first == second 
+
+data Temp = Cel Float | Fer Float deriving (Show)
+
+x' = Cel 100
+y' = Fer 212
+
+z' = x' == y' 
+
+instance Eq Temp where 
+  (==) (Cel x') (Cel y') = x' == y'
+  (==) (Fer x') (Fer y') = x' == y'
+  (==) (Cel x') (Fer y') = (1.8 * x' + 32) == y' 
+  (==) (Fer x') (Cel y') = (1.8 * y' + 32) == x'
+
+
+-- The type Eq is defined so we can compare myBlock and yourBlock
+data Blockchain' = Genesis' | Block' Int Blockchain' | LastBlock' deriving (Show, Eq)
+myBlock = Block' 1 (Block' 2 (Block' 3 (Block' 4 LastBlock')))
+yourBlock = Block' 1 (Block' 2 (Block' 3 (Block' 4 (Block' 5 LastBlock'))))
+
+
+-- . is the function composition operator
