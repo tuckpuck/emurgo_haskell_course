@@ -491,3 +491,23 @@ yourBlock = Block' 1 (Block' 2 (Block' 3 (Block' 4 (Block' 5 LastBlock'))))
 
 
 -- . is the function composition operator
+
+
+
+-- Create a tic tac toe game
+data CellState = EmptyCell | AnsX | AnsO deriving (Show, Eq)
+data Cell = Cell Int Int CellState deriving Show
+type GridState = [Cell]
+data GameState = Running | Xwins | Owins | Atie deriving Show
+
+size :: Int
+size = 3
+
+
+initialGridState :: Int -> GridState
+initialGridState gridsize = go gridsize gridsize 
+  where
+    go _ 0 = [] 
+    go 0 y = go gridsize (y - 1)
+    go x y = go (x - 1) y ++ [(Cell x y EmptyCell)]
+  
