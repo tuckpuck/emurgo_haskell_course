@@ -571,3 +571,67 @@ validateMove (Cell x y cs) gs =  (f gs) == 1   -- if (f gs) == 1 then True else 
 
 -- makeMove (Cell x y cs) gs = map (\el -> if (el.x == x and el.y== y) Cell x y Value else elem) cs
 
+
+  -- A single data constructor like below is unary. For optimization, these are better as 'newtype'.
+-- Data color a is the type constructor. Color a is the data constructor. 
+-- A is the type variable
+data Color a = Color a
+
+-- The two declarations below are showing polymorphism. 
+x'' :: Color Int
+x'' = Color 200
+
+y'' :: Color String
+y'' = Color "Blue"
+
+data Mood' = Happy' | Sad' | Grumpy' deriving (Show, Ord, Eq)
+ex1 = Grumpy' > Sad'
+ex2 = Grumpy' < Sad'
+ex3 = Grumpy' == Happy'
+ex4 = Grumpy' == Grumpy'
+
+-- Maybe, Just, Nothing
+-- They are part of the Prelude
+-- z could be nothing, or X could be just 5
+z'' :: Maybe Int
+z'' = Just 5
+
+safeDiv :: Int -> Int -> Maybe Int
+safeDiv _ 0 = Nothing
+safeDiv n m = Just (n `div` m)
+
+-- Either
+-- Either has left and right. Left is for error handling. Right is for correct execution. 
+myDiv :: Int -> Int -> Either String Int
+myDiv 0 0 = Left "NaN"
+myDiv _ 0 = Left "Infinity"
+myDiv a b = Right (a `div` b)
+
+-- Nothing, and Left are wrappers for errors
+-- Right, Proper, and Just are wrappers for correct answers 
+
+data Circle = Circle Float deriving Show
+
+safeDivCircle :: Circle -> Circle -> Maybe Circle
+safeDivCircle _ (Circle 0) = Nothing
+safeDivCircle (Circle x)(Circle y) = Just (Circle (x / y))
+
+
+data Rectangle = Rect Int Int deriving Show
+flipRectangle :: Rectangle -> Rectangle 
+flipRectangle (Rect x y) = Rect y x
+
+-- Create a List data type
+data List a = Empty | Cons a (List a) deriving Show
+
+myList :: List Int
+myList = Cons 0 (Cons 1 (Cons 2 Empty))
+-- 0:1:2:[]
+
+-- Create a binary tree data type
+data BTree a = Leaf' a | Node' (BTree Int) (BTree Int) deriving Show
+
+myTree' :: BTree Int
+myTree' = Node' (Leaf' 0) (Node' (Node' (Leaf' 2)(Leaf' 3)) (Leaf' 1))
+
+
