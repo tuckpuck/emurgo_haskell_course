@@ -571,6 +571,21 @@ validateMove (Cell x y cs) gs =  (f gs) == 1   -- if (f gs) == 1 then True else 
 
 -- makeMove (Cell x y cs) gs = map (\el -> if (el.x == x and el.y== y) Cell x y Value else elem) cs
 
+changeGridState :: Cell -> GridState -> GridState
+changeGridState (Cell x y cs) gs
+  | validateMove (Cell x y cs) gs = map (\c -> if (x == (xPos c)) && (y == (yPos c))
+                                        then (Cell x y cs)
+                                        else c) gs 
+
+
+step1' = iGS3 size
+step2' = changeGridState (Cell 1 1 AnO) step1'
+step3' = changeGridState (Cell 1 2 AnX) step2'
+step4' = changeGridState (Cell 2 2 AnO) step3'
+step5' = changeGridState (Cell 1 3 AnX) step4'
+step6' = changeGridState (Cell 3 3 AnO) step5'
+
+
 
   -- A single data constructor like below is unary. For optimization, these are better as 'newtype'.
 -- Data color a is the type constructor. Color a is the data constructor. 
