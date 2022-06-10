@@ -1,5 +1,9 @@
 module EmurgoCourseNotes where
 import Emurgo_Haskell_Course (sum''')
+import Data.List
+import Data.Char
+
+
 
 
 doubleSmallNumber :: Int -> Int
@@ -79,3 +83,87 @@ zipThis = zip [1,2,3,4,5] [6,7,8,9,10]
 
 -- You can use an infinite list for one zip param because haskell will stop at the length of the shorter list
 zipThat = zip [1..] ["one", "two", "three", "four"]
+
+
+-- Type declarations introduce a synonym for existing data types.
+-- String was made this way 
+-- type String = [Char]
+
+type Point = (Float, Float)
+combineVectors :: Point -> Point -> Point
+combineVectors (w,x) (y,z) = (w+y, x+z)
+
+
+type Name = String
+type Phone = Int
+type User = [(Name, Phone)]
+
+
+-- Data Declarations create new types from existing types
+-- "Define a type Color which can have the value of Red, Blue, and Green"
+data Color = Red | Blue | Green
+-- Color is data constructor. Red, Blue, Green are value constructors. They are values of 'Color'
+grassColor = Green
+-- :t grassColor 
+-- grassColor :: Color
+
+isRed :: Color -> Bool
+isRed Red = True
+isRed _ = False
+
+-- Data constructors can also take arguments
+type FullName = String
+type Author = String
+type Year = Int
+-- Book combines Name Author Year as arguments
+data Book = Book FullName Author Year deriving Show
+hobbit = Book "the hobbit" "JRR Tolkien" 1937
+atomicHabits = Book "atomic habits" "James Clear" 2018
+
+
+capitalizeTitleAndAuthor :: Book -> Book
+capitalizeTitleAndAuthor (Book na au ye) = Book (upperFirst na) (upperFirst au) ye
+
+upperFirst :: [Char] -> [Char]
+upperFirst = concat
+           . map (\(c:cs) -> toUpper c : cs)
+           . groupBy (\a b -> isSpace a == isSpace b)
+
+-- type Height = Float
+-- type Width = Float
+-- type Radius = Float
+-- data Shape = Rectangle Height Width | Circle Radius deriving Show
+
+-- This could also be written like this, in the 'record' syntax
+data Shape = Rectangle { height :: Float, width :: Float} | Circle { radius :: Float} deriving Show
+-- Record syntax provides getters and setters to modify values of a data type
+rect = Rectangle 30 20
+rect2 = rect { width = 30 }
+cir = Circle 3.2
+
+calculateArea :: Shape -> Float
+calculateArea (Rectangle h w) = h * w
+calculateArea (Circle r) = pi * r**2
+
+type Wheels = Int
+type PaintColor = String
+type Model = String
+data Transport = Car Wheels PaintColor Model | Bike Wheels PaintColor Model deriving Show
+
+suburu = Car 4 "Gray" "Forrester"
+trek = Bike 2 "Red" "Trek"
+
+
+isBikeOrCar :: Transport -> String
+isBikeOrCar (Bike _ _ _) = "Bike"
+isBikeOrCar (Car _ _ _) = "Car"
+
+
+
+-- newtype is used when you have strictly one value constructor which takes strictly one argument
+-- Box is the data constructor and value constructor
+newtype Box a = Box { unBox :: a } deriving Show
+
+myBox = Box 23
+myBoxInt = unBox myBox
+
