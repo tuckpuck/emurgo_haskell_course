@@ -2,6 +2,7 @@ module EmurgoCourseNotes where
 import Emurgo_Haskell_Course (sum''')
 import Data.List
 import Data.Char
+import Data.Monoid
 
 
 
@@ -166,4 +167,67 @@ newtype Box a = Box { unBox :: a } deriving Show
 
 myBox = Box 23
 myBoxInt = unBox myBox
+
+
+
+
+
+returnFloat :: Float -> Float -> Float
+returnFloat x y = x * y
+
+-- Polymorphic types
+-- Accept a value of any type
+
+-- Maybe is a polymorphic data constructor
+-- data Maybe a = Nothing | Just a
+-- Nothing and Just are value constructors
+myVal = Just "World"
+-- Just takes a value of type a and returns a value of Maybe a
+
+
+-- List 
+-- List is a polymorphic data constructor, with Empty and Cons as value constructors
+-- data List a = Empty | Cons a (List a)
+
+
+
+-- Instance declarations
+-- Used to supply custom instructions for functions
+
+
+-- Typeclass declarations
+-- Typeclasses can be defined using the `type` keyword
+
+
+
+-- Monad
+-- >>= is the bind operator
+-- >> Variant bind that discards previous computations
+-- Maybe and IO are both monads
+-- Lists, either, and pairs are also monads
+
+
+-- Combine operations using Monoid
+isForbidden :: Char -> Bool
+isForbidden = getAny . foldMap (Any .) predicates
+    where predicates = [isLower, isDigit]
+
+-- Monoid is a typeclass for types that have a natural operation for combining values
+
+-- Haskell compared to JS
+-- No loops
+-- No if 
+-- Functions is a single return
+-- No side effects (we can do this by separating pure functional and dirty IO)
+-- No assignments within variables
+-- No arrays
+-- Functions can have only 0 or 1 arguments
+
+
+
+fizzbuzz n
+    | n `mod` 15 == 0 = "fizzbuzz"
+    | n `mod` 5 == 0 = "fizz"
+    | n `mod` 3 == 0 = "buzz"
+    | otherwise = show n
 
