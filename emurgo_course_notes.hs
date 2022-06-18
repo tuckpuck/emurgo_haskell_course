@@ -1,5 +1,5 @@
 module EmurgoCourseNotes where
-import Emurgo_Haskell_Course (sum''')
+-- import Emurgo_Haskell_Course (sum''')
 import Data.List
 import Data.Char
 import Data.Monoid
@@ -212,8 +212,6 @@ isForbidden :: Char -> Bool
 isForbidden = getAny . foldMap (Any .) predicates
     where predicates = [isLower, isDigit]
 
--- Monoid is a typeclass for types that have a natural operation for combining values
-
 -- Haskell compared to JS
 -- No loops
 -- No if 
@@ -230,4 +228,152 @@ fizzbuzz n
     | n `mod` 5 == 0 = "fizz"
     | n `mod` 3 == 0 = "buzz"
     | otherwise = show n
+
+
+-- Haskell is a pure functional programming language
+-- No assignment statements
+-- No variables 
+-- Once given a value, never chnge
+-- No side effects at all
+
+-- Strive for modularity
+-- Output will always be the same given an input
+-- No concept of time
+-- Reason about code with ease
+-- Just follow types
+
+-- Function without parameters is called a definition
+-- ex. helloWorld = "Hello World"
+
+-- Functions must start with a small letter
+
+-- All functions with multiple arguments are actually currying
+
+answerToEverything = 42
+complexCalc :: Integer -> Integer -> Integer -> Integer
+complexCalc x y z = x * y * z * answerToEverything
+-- Due to currying, what this really means is 
+-- complexCalc :: Integer -> (Integer -> (Integer -> Integer))
+-- complexCalc 10 20 30 is really ((complexCalc 10) 20) 30
+
+
+-- Haskell will infer types based on requirements of functions
+london u = "London " ++ u
+
+isA c = c == "a"
+
+-- Char, Integers, Bool, Int, Float, Doubles, Tuples, Lists
+doubleListOfNum :: [Int] -> [Int]
+doubleListOfNum lst = map (*2) lst
+
+
+-- Polymorphic types 
+-- length :: [a] -> Int
+-- 'a' is a type variable, which means length can be applied to list of any type
+
+
+-- Lists
+-- Can take an element from a list using !!
+-- There is a 'null' method to say whether a list is empty
+-- Head, tail, init, last are methods to get parts of a list
+-- Drop drops the first n values and takes the rest
+tryDrop = drop 3 [1,3,5,7]
+-- Take takes the first n values
+tryTake = take 3 [1,3,5,7]
+
+binary = take 100 (cycle [0,1,1,0,0,1])
+repeating = take 50 (repeat 4)
+
+-- List comprehensions
+findPowersToN :: Num a => Int -> [a]
+findPowersToN n = take n [2 ^ x | x <- [1..]]
+
+-- Create tuples with list comprehensions
+createTuples = [(x,y) | x <- [1..5], y <- [1..5]]
+-- An alternative way with fewer iterations
+createTuples' = [(x,y) | x <- [1..5], y  <- [x..3]]
+
+findEvens = [x | x <- [1..100], x `mod` 2 == 0]
+
+-- Zip can be run using infinite lists
+newTuple = zip [1,2,3,4,5,6] (cycle [0,1,2])
+-- zipWith takes another argument and runs it on the pairs
+newZipWith = zipWith (+) [1..100] [1..10]
+
+
+-- Type classes are  a set that holds types. They define methods that the types can use. 
+-- Read is used to convert to an integer
+tryRead = read "5" + 10
+-- If it doesn't have context, we can say what type it should go to 
+tryRead' = read "5" :: Integer
+
+
+
+-- Class constraint 
+add :: Num a => a -> a -> a
+add a b = a + b
+
+-- Pattern matching
+findLength :: Num a => [a] -> a
+findLength [] = 0
+findLength (x:xs) = 1 + findLength xs
+
+second :: (a,b,c) -> b
+second (_,y,_) = y
+
+
+-- Data declarations and deriving existing type classes
+data OS = Windows | OSX | Linux | Unix deriving (Eq, Ord, Show, Read)
+-- Create a new type
+class Bootable a where 
+    boot :: a -> [Char]
+
+instance Bootable OS where
+    boot Unix = "Unix"
+    boot Linux = "Linux"
+    boot OSX = "OSX"
+    boot Windows = "Windows"
+
+
+-- Monoid is a typeclass for types that have a natural operation for combining values
+-- Identity of a monoid is the value which satisfies the following i @ x = x, and x @ i = x for all possible values of x
+
+-- Identities:
+-- (+) is 0
+-- (*) is 1
+-- (&&) is True
+-- (||) is False
+-- (++) is []
+
+-- <> is a synonym for mappend
+-- mempty is the Identity of mappend
+
+
+-- Modoids should follow a pattern that mempty is the Identity in all cases. 
+-- ex.
+-- "world" ++ []
+-- [] ++ "world"
+-- ("abc" ++ "def") ++ "ghi"
+-- "abc" ++ ("def" ++ "ghi")
+
+-- Int or FLoat can be Monoid in two ways.
+-- (+) and 0, and (*) and 1
+
+-- To get a type like Int to be a Monoid, you have to wrap it.
+-- newtype Sum = Sum {getSum :: a}
+
+-- instance Num a => Monoid (Sum a) where
+--     mempty = Sum 0
+--     Sum x <> Sum y = Sum (x + y)    
+
+-- Monads capture the idea of a type which contains an identity with respect to an operator. 
+-- Monoids implement mempty which represents an identity element and mappend for the operator
+
+-- A monoid has elements
+-- It is a binary operation
+-- The operation is associative
+-- There is a neutral element
+
+-- Extends a binary operation of 2 inputs to allow many inputs. Encodes the way that operations can happen on many mathematical objects. 
+
 
