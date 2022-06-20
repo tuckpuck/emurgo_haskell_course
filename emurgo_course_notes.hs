@@ -3,6 +3,7 @@ module EmurgoCourseNotes where
 import Data.List
 import Data.Char
 import Data.Monoid
+import Data.Sequence (Seq(Empty))
 
 
 
@@ -376,4 +377,52 @@ instance Bootable OS where
 
 -- Extends a binary operation of 2 inputs to allow many inputs. Encodes the way that operations can happen on many mathematical objects. 
 
+
+-- Functor
+-- A functor is a typeclass
+
+data Maybe2 a = Just2 a | Nothing2 deriving Show
+
+instance Functor Maybe2 where
+    fmap func (Just2 a) = Just2 (func a)
+    fmap func Nothing2 = Nothing2
+
+-- Functor is called like this: (+3) <$> (Just2 4)
+-- Identical to saying fmap (+3)(Just2 4)
+
+
+
+
+data Tree a = Tip a | Branch (Tree a) (Tree a) deriving Show
+
+myTree = Branch (Tip 4) (Branch (Tip 5)(Tip 6))
+
+instance Functor Tree where
+    fmap func (Tip a) = Tip (func a)
+    fmap func (Branch left right) = Branch (fmap func left) (fmap func right)
+-- Now, you can run functions on all items like this: fmap (+3) myTree
+
+
+
+maybeMap :: (a -> b) -> Maybe a -> Maybe b
+maybeMap _ Nothing = Nothing
+maybeMap f (Just x) = Just (f x)
+
+
+map1 = maybeMap (+100) (Just 30)
+map2 = maybeMap (^4) (Just 100)
+
+
+-- listMap :: (a -> b) -> List a -> List b
+-- listMap _ Empty = Empty
+-- listMap Cons (x xs) = Cons (f x) (listMap f xs)
+
+
+data MakeList a = Item a | Empty deriving Show
+
+myList = Item 1
+myList2 = Item "hello"
+myList3 = EmurgoCourseNotes.Empty
+
+-- When making a function to do something similar into multiple elements, we can use the functor typeclass. 
 
