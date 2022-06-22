@@ -426,3 +426,103 @@ myList3 = EmurgoCourseNotes.Empty
 
 -- When making a function to do something similar into multiple elements, we can use the functor typeclass. 
 
+
+factorial :: Integer -> Integer
+factorial 0 = 0
+factorial 1 = 1
+factorial x = x * (factorial (x - 1))
+
+
+-- Haskell is built of functions, and we compose them together to get the functionality of the program. 
+
+
+addInt :: (Int,Int) -> Int
+addInt (a,b) = a + b
+
+
+
+
+testMap = map (+1) [1..10]
+
+map'' f xs = [f n | n <- xs]
+testMap' = map'' (+1) [1..10]
+
+
+
+listCompEx = [x + 1 | x <- [1..10], x `mod` 2 == 0]
+
+filter' p xs = [n | n <- xs , p n]
+testFilter' = filter' (>100) [1..1000]
+testFilter'2 = filter' even [1..1000]
+
+
+
+-- Program that tests character frequency in a string
+-- run :: String -> [(Char, Int)]
+-- run 
+
+toLowerCaseLetters :: String -> String
+toLowerCaseLetters = map toLower
+
+removeSpaces :: String -> String
+removeSpaces = filter (\x -> x /= ' ')
+
+getFrequency = map (\x -> (head x, length x))
+
+normalize = getFrequency (group (sort (toLowerCaseLetters (removeSpaces ['B', 'a', ' ', 'b']))))
+
+main :: IO ()
+main = putStrLn "Hello Haskell"
+
+
+-- Types
+-- Type Synonyms
+type ID = Int
+type DOB = (Int, Int, Int)
+
+mapIDs :: ID -> ID
+mapIDs = (*2)
+
+
+-- Build custom data types
+-- data List = EmptyList | Cons Char (List)
+
+
+-- Parameterized custom data types
+data List a = EmptyList | Cons a (List a)
+
+-- Convert a custom List type to String
+toHList :: List a -> [a]
+toHList EmptyList = []
+toHList (Cons x xs) = x : toHList xs
+
+map' :: (a -> a) -> [a] -> [a]
+map' f [] = []
+map' f (x:xs) = f x : map' f xs
+
+
+-- This is a way to implement error handling
+data Error a = Error | Ok a deriving Show
+
+safeDivide :: Error Int -> Error Int -> Error Int 
+safeDivide Error _ = Error
+safeDivide _ Error = Error
+safeDivide (Ok a) (Ok 0) = Error
+safeDivide (Ok 0) (Ok b) = Error
+safeDivide (Ok a) (Ok b) = Ok (a `div` b)
+
+
+
+data Person = Person String Int (Int, Int, Int)
+
+person1 = Person "James" 23 (22, 07, 1995)
+
+getDob :: Person -> (Int, Int, Int)
+getDob (Person _ _ dob) = dob
+
+
+-- Record Syntax
+data Human = Human { firstName :: String,
+                           age :: Int, 
+                           dob :: (Int, Int, Int) } deriving Show
+
