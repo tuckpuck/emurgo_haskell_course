@@ -526,3 +526,47 @@ data Human = Human { firstName :: String,
                            age :: Int, 
                            dob :: (Int, Int, Int) } deriving Show
 
+
+
+-- Type classes
+class Show' a where
+    show' :: a -> String
+
+instance Show' a => Show' (List a) where
+    show' (EmptyList) = "Empty"
+    show' (Cons a xs) = "Cons " ++ show' a ++ show' xs
+
+
+data Number = One | Two | Three | Four | Five | Six | Seven | Eight | Nine | Ten deriving (Show, Ord, Eq)
+
+numList = [Three, Nine, Ten, Four, Three, Two]
+sortedList = sort numList
+
+
+data Q = Q Integer Integer
+
+instance Show Q where
+    show (Q n d) = concat [show n, "/", show d]
+
+instance Eq Q where
+    r1 == r2 = (n1 == n2 && d1 == d2)
+        where (Q n1 d1) = simpQ r1
+              (Q n2 d2) = simpQ r2
+
+addQ :: Q -> Q -> Q
+addQ (Q a1 b1) (Q a2 b2) = Q (a1 + a2) (b1 + b2)
+
+instance Num Q where 
+    (+) = addQ
+    negate (Q n d) = Q (-n) d
+    (*) (Q n1 d1) (Q n2 d2) = simpQ (Q (n1 * n2) (d1 * d2))
+    abs (Q n d) = Q (abs n) (abs d)
+    signum (Q n d) = Q (signum n * signum d) 1
+    fromInteger n = Q n 1
+
+
+simpQ :: Q -> Q
+simpQ (Q n d) = Q (n `div` c) (d `div` c)
+    where c = gcd n d
+
+
