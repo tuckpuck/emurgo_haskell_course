@@ -570,3 +570,50 @@ simpQ (Q n d) = Q (n `div` c) (d `div` c)
     where c = gcd n d
 
 
+sumListOfDigits :: [Int] -> Int
+sumListOfDigits = foldr (+) 0
+
+factorial' :: [Int] -> Int
+factorial' = foldr (*) 1
+
+fold :: (a -> b -> b) -> b -> [a] -> b
+fold cons empty [] = empty
+fold cons empty (x:xs) = x `cons` (fold cons empty xs)
+
+
+data Temperature = Celsius Float | Fahrenheit Float 
+
+
+instance Show Temperature where
+    show (Celsius x) = "The temperature is " ++ show x ++ " in Celsius"
+    show (Fahrenheit n) = "The temperature is " ++ show n ++ " in Fahrenheit"
+
+instance Eq Temperature where
+    (==) (Celsius x) (Celsius y) = x == y
+    (==) (Fahrenheit x) (Fahrenheit y) = x == y
+    (==) (Celsius x) (Fahrenheit y) = (1.8 * x + 32) == y 
+    (==) (Fahrenheit x) (Celsius y) = (1.8 * y + 32) == x 
+
+instance Num Temperature where
+    (+) (Celsius x) (Celsius y) = Celsius (x+y)
+    (+) (Fahrenheit x) (Fahrenheit y) = Fahrenheit (x+y)
+    (+) (Celsius x) (Fahrenheit y) = Celsius (x + (y-32)/1.8)
+    (+) (Fahrenheit x) (Celsius y) = Fahrenheit (x + y * 1.8 + 32)
+    negate (Celsius x) = Celsius (negate x)
+    negate (Fahrenheit x) = Fahrenheit (negate x)
+    (*) (Celsius x) (Celsius y) = Celsius (x * y)
+    (*) (Fahrenheit x) (Fahrenheit y) = Fahrenheit (x * y)
+    (*) (Celsius x) (Fahrenheit y) = Celsius (x * ((y-32)/1.8))
+    (*) (Fahrenheit x) (Celsius y) = Fahrenheit(x * (y*1.8 + 32))
+    signum (Celsius x) = Celsius (signum x)
+    signum (Fahrenheit x) = Fahrenheit (signum x)
+    fromInteger (x) = Celsius (fromInteger x)
+    abs (Celsius x) = Celsius (abs x)
+    abs (Fahrenheit x) = Fahrenheit (abs x)
+
+
+-- Newtype gives some performace advantages, and allow different type class definitions on our new types
+newtype RevString = RevString String
+
+instance Show RevString where
+    show (RevString s) = reverse s
