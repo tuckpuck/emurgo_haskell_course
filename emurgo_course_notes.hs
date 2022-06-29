@@ -4,6 +4,7 @@ import Data.List
 import Data.Char
 import Data.Monoid
 import Data.Sequence (Seq(Empty))
+import System.Console.Haskeline (mapInputT)
 
 
 
@@ -637,5 +638,70 @@ doubleListConcat = mconcat [[1, 2], [4, 5]]
 doubleListConcatM = mconcat [[1,2], mempty]
 listConcat = mconcat [[1,2,3], [4,5,6]]
 listConcatM = mconcat [mempty, [4,5,6], [6,4,5,6]]
+
+
+
+-- Functors
+-- Functors are a type class. The type class has a function fmap. Fmap is map essentially. Fmap is the minimal amount that needs to be defined to implement Functor class. 
+-- Order of arguments is important
+mapIt = map (+1) [1..10]
+mapIt2 = fmap (+1) [1..10]
+mapIt3 = (+1) <$> [1..10]
+mapIt4 = fmap (+1) (Just 1)
+
+
+data Failure' a = Fail' | Ok' a deriving (Show)
+
+instance Functor Failure' where
+    fmap f (Ok' x) = (Ok' $ f x)
+    fmap f (Fail') = Fail'
+
+tryFail = fmap (+1) (Fail')
+tryOk = fmap (+1) (Ok' 10)
+
+
+-- In lambda funcations you first take the parameters, then the function body
+-- Lambdas can be applied to lambdas
+-- Lambdas take only one variable by default. But they can be nested. (\a.(\b.(\c.(d.(\e.(~~~~~~)))))
+
+
+
+
+returnMe' x = map (\z->z) x
+
+addSomethingTwo x = (\x->x+1) x
+
+
+-- Integral numbers
+---- Int - Bit-restricted integer datatype
+---- Integer - Can grow or shrink to arbitrary integer size
+-- Fractional
+---- Float - Memory limited decimal storage
+---- Double - 
+---- Rational - Arbitrary precision, stores number as evolving fraction. 
+---- Scientific - Arbitrary precision
+-- Char
+-- List
+-- String
+-- Tuples
+-- IO
+
+-- IO means running a program than involves it may contain side effects
+-- Tuples contain an arbitrary (but constant) amount of members
+-- Tuples can have menbers of varying types 
+-- Tuple conaining Int and String different than one containing String and Int
+-- All items in a list must be the same type
+-- Strings are a list of characters
+cypherText :: [Char] -> [Char]
+cypherText x = map (\z -> succ z) x
+
+-- A typeclass guarantees certain properties or functionality
+-- Types have an instance of a typeclass
+
+-- Common typeclasses:
+-- Num (Negation, conversion from Integer type, and sign)
+-- Bounded (min and max)
+-- Ord (Ordered by comparison > < >= <=)
+-- EQ (Describes types where equality is knowable == /=)
 
 
