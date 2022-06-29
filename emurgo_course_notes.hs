@@ -705,3 +705,24 @@ cypherText x = map (\z -> succ z) x
 -- EQ (Describes types where equality is knowable == /=)
 
 
+-- Types
+-- There is no untyped data in Haskell
+-- The type of any expression, value, or function can be explicitly stated
+-- Types of variables and functions are inferred if not stated explicitly
+-- Code behaves more predictably due to the focus on types
+
+-- Data declarations allow the creation of new types. They allow the creation of one or more Data Constructors
+
+-- Type classes are like interfaces. They describe how the data is used rather than what it is. 
+
+-- If a type is of a type class, you say that type has an instance of a type class
+
+-- Polymorphism - type signatures that can represent more than one type
+-- Parametric polymorphism knows nothing:
+-- a -> b -> a
+-- Constrained polymorphism:
+-- (Eq a) => a -> a -> Bool
+-- Type system keeps things general until evaluation must happen
+-- Type classes are ordered and can speficy prerequisites
+-- Ex. EQ > Ord > Enum
+ 
