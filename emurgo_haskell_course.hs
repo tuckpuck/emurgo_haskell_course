@@ -650,3 +650,5 @@ myTree' :: BTree Int
 myTree' = Node' (Leaf' 0) (Node' (Node' (Leaf' 2)(Leaf' 3)) (Leaf' 1))
 
 
+
+

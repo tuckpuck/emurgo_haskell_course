@@ -617,3 +617,25 @@ newtype RevString = RevString String
 
 instance Show RevString where
     show (RevString s) = reverse s
+
+
+
+
+-- Monoids 
+-- mappend is associative and mempty is its identity element.
+-- Mappend is a binary operation. It can also be called infix using <>
+stringMappend = mappend "Julie" "Samuels"
+stringMappendM = mappend "Julie" mempty
+listMappend = mappend [1,2,3,4] [2,4,5,3] 
+listMappendM = mappend mempty [2,3,4,4]
+
+-- Using mconcat
+-- Mconcat takes a list of elements and runs foldr mappend on the items
+stringConcat = mconcat ["Julie", "Moronuki"]
+stringConcatM = mconcat ["Julie", mempty]
+doubleListConcat = mconcat [[1, 2], [4, 5]]
+doubleListConcatM = mconcat [[1,2], mempty]
+listConcat = mconcat [[1,2,3], [4,5,6]]
+listConcatM = mconcat [mempty, [4,5,6], [6,4,5,6]]
+
+
