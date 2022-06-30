@@ -723,6 +723,54 @@ cypherText x = map (\z -> succ z) x
 -- Constrained polymorphism:
 -- (Eq a) => a -> a -> Bool
 -- Type system keeps things general until evaluation must happen
--- Type classes are ordered and can speficy prerequisites
+-- Type classes are ordered and can specify prerequisites
 -- Ex. EQ > Ord > Enum
  
+
+-- Anything that can be accomplished via iteration can be done using recursion.
+-- This is why Haskell has only recursion, no looping
+
+-- Failed computations result in bottom
+-- Infinite recursion results in an exception (a way in which bottom is handled)
+-- Default lists are a form of singly linked lists
+
+addMeUp :: [Int] -> Int
+addMeUp [] = 0
+addMeUp [x] = x
+addMeUp (x:xs) = x + addMeUp xs
+
+-- Zip pairs items of two lists into tuples
+-- Unzip takes a list of tuples, and gives a tuple of lists
+-- Folding summarizes the contents of a list. It requires an opration to combine 2 arguments. Also needs an accumulator.
+-- For operations that are associative (like + for example. they are the same result whether applied from left to right) then the result won't change whether you use foldl or foldr
+
+-- We often define new data types to make expressing our program easier.
+-- Product type
+data PairOfThings a = Pair a a
+-- Sum Type
+data Bool' = True' | False'
+-- Often, new data types are a mix of the two. 
+
+-- Some types require a type-level argument
+-- Kinds are types for types
+-- Only things of the kind '*' can be instantiated.
+-- The number 3 has the type Int, and type Int has the kind '*'
+-- PairOfThings have a kind of '* -> *'
+-- Types that require arguments are known as higher kinded types.
+
+-- Data Maybe = Nothing | Just a
+-- Has the kind '* -> *
+
+-- Data Either a b = Left a | Right b
+-- Has the kind '* -> * -> *'
+
+
+
+
+
+
+
+
+
+
+
