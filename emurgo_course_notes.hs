@@ -764,13 +764,15 @@ data Bool' = True' | False'
 -- Data Either a b = Left a | Right b
 -- Has the kind '* -> * -> *'
 
+-- Monoid is a kind of algebra
+-- Monoids all follow the laws of associativity and identity. 
+-- The Identity is the value that, when added to a function, will not effect the result
+-- id x = x. We call this value mempty in Haskell
+-- All monoids can be reasonably folded.  
+addLists = [1,2,3] <> [4,5,6]
+combineLists = mconcat [[1,2,3], [4,5,6,7,8]]
 
-
-
-
-
-
-
-
-
-
+-- Functor 
+-- Functor has a container type f that holds value of type a
+-- Functor has an fmap function that takes a function and lifts it.  
+addToJust = fmap (+10) (Just 5) :: Maybe Int
