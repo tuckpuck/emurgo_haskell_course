@@ -776,3 +776,50 @@ combineLists = mconcat [[1,2,3], [4,5,6,7,8]]
 -- Functor has a container type f that holds value of type a
 -- Functor has an fmap function that takes a function and lifts it.  
 addToJust = fmap (+10) (Just 5) :: Maybe Int
+
+
+
+-- Applicatives
+-- All Applicatives also have to be Functors
+-- This is an example of an applicative in Algebra: [(+1), (*2)] <*> [2, 4] == [3,5,4,8]
+-- Applicative functions are Pure, and this infix function <*> also known as app
+-- Applicative can be used as an alternative to || 
+-- Applicatives allow you to apply a function to more than one argument
+-- Applicatives are closely related to functors
+-- Pure is a very simple function that puts a value in a data structure
+-- <*> takes a function and a value and applies the function to the value
+-- Maybe Applicative
+app1 = pure (^2) <*> Just 2
+app2 = pure (+) <*> Just 3 <*> Just 4
+app3 = pure (*) <*> Just 5 <*> Just 6
+-- List Applicative
+app4 = pure (^ 2) <*> [ 2, 3, 4 ]
+app5 = pure (+) <*> [ 2, 3 ] <*> [ 4, 5 ]
+app6 = pure (*) <*> [ 2, 3, 4 ] <*> [ 5, 6, 7 ]
+-- IO Applicative
+app7 = pure tail <*> getLine
+app8 = pure (^ 2) <*> (getLine >>= \x -> return $ read x)
+app9 = pure (^ 2) <*> (getLine >>= \x -> return $ read x)
+
+
+
+data Warn a = Warn | Okay a deriving (Show)
+
+instance Functor Warn where
+    fmap f Warn = Warn
+    fmap f (Okay a) = Okay $ f a
+
+instance Applicative Warn where
+    pure x = Okay x
+    (Okay f) <*> (Okay x) = (Okay $ f x)
+    (Warn) <*> _ = Warn
+    _ <*> (Warn) = Warn
+
+data HomoSapein = HomoSapein String Int Int deriving (Show)
+
+
+-- This one will throw a warning because one element is Falsy
+appWarn = HomoSapein <$> (Okay "Tucker") <*> Warn <*> (Okay 43)
+-- This one will use the data provided
+appApprove = HomoSapein <$> (Okay "Tucker") <*> (Okay 20) <*> (Okay 43)
+
