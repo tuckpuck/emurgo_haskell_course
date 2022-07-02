@@ -472,8 +472,7 @@ getFrequency = map (\x -> (head x, length x))
 
 normalize = getFrequency (group (sort (toLowerCaseLetters (removeSpaces ['B', 'a', ' ', 'b']))))
 
-main :: IO ()
-main = putStrLn "Hello Haskell"
+
 
 
 -- Types
@@ -822,4 +821,36 @@ data HomoSapein = HomoSapein String Int Int deriving (Show)
 appWarn = HomoSapein <$> (Okay "Tucker") <*> Warn <*> (Okay 43)
 -- This one will use the data provided
 appApprove = HomoSapein <$> (Okay "Tucker") <*> (Okay 20) <*> (Okay 43)
+
+-- >>= is a bind operator. It's a way to run functions and return an IO value
+-- Using bind and return, you can turn any input into IO
+getInteger :: IO Int
+getInteger = getLine >>= \s -> return (read s)
+
+add' :: IO ()
+add' = 
+    getInteger >>= \a ->
+    getInteger >>= \b ->
+    print (a + b)
+
+-- Could be called like this:
+-- main :: IO ()
+-- main = add'
+
+sayName :: IO ()
+sayName = getLine >>= (\name -> putStrLn ("hello " ++ name ++ "!"))
+
+
+main :: IO ()
+main = 
+    -- Get two inputs
+    putStrLn "Enter the first name" >>= \_ -> 
+    getLine >>= \s ->
+    putStrLn "Enter the second name" >>= \_ -> 
+    getLine >>= \t -> 
+    putStrLn ("hello " ++ t ++ " and " ++ s ++ "!")
+
+
+-- PutStrLn doesn't really have a return, it is used only for its effects
+-- Callbacks in monadic functions use the symbol 'k'
 
