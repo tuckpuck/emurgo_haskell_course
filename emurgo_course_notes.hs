@@ -570,6 +570,10 @@ simpQ :: Q -> Q
 simpQ (Q n d) = Q (n `div` c) (d `div` c)
     where c = gcd n d
 
+-- Foldable is a type class that describes structures of values that can be summarized into a single value. 
+-- To use foldable you have to define FoldMap, which translates a structure into a structure of monoidal values by applying mapply to each. 
+
+
 
 sumListOfDigits :: [Int] -> Int
 sumListOfDigits = foldr (+) 0
@@ -580,6 +584,11 @@ factorial' = foldr (*) 1
 fold :: (a -> b -> b) -> b -> [a] -> b
 fold cons empty [] = empty
 fold cons empty (x:xs) = x `cons` (fold cons empty xs)
+
+-- Traversable is a type class that rebuilds the tree with additional applicative structure and having applicative effects along the way. It is an enhanced functor. 
+
+-- State and Reader are additional type classes that are used to iteratively compose functions together. 
+
 
 
 data Temperature = Celsius Float | Fahrenheit Float 
