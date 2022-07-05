@@ -3,8 +3,9 @@ module EmurgoCourseNotes where
 import Data.List
 import Data.Char
 import Data.Monoid
-import Data.Sequence (Seq(Empty))
+import Data.Sequence (Seq(Empty), viewl)
 import System.Console.Haskeline (mapInputT)
+import Emurgo_Haskell_Course (x, y)
 
 
 
@@ -841,6 +842,7 @@ sayName :: IO ()
 sayName = getLine >>= (\name -> putStrLn ("hello " ++ name ++ "!"))
 
 
+
 main :: IO ()
 main = 
     -- Get two inputs
@@ -854,3 +856,49 @@ main =
 -- PutStrLn doesn't really have a return, it is used only for its effects
 -- Callbacks in monadic functions use the symbol 'k'
 
+
+data Expr = Val Int | Div Expr Expr
+
+expr1 = Val 1
+expr2 = Div (Val 6) (Val 2)
+expr3 = Div (Val 6) (Div (Val 3) (Val 1))
+
+-- Original way to write, without Monads
+-- eval :: Expr -> Maybe Int
+-- eval (Val n) = Just n
+-- eval (Div x y) = case eval x of 
+--     Nothing -> Nothing
+--     Just n -> case eval y of
+--         Nothing -> Nothing
+--         Just m -> safeDiv (eval n) (eval m)
+
+-- Another way to write using bind notation
+-- eval :: Expr -> Maybe Int
+-- eval (Val n) = return n 
+-- eval (Div x y) = eval x >>= (\n -> 
+--                  eval y >>= (\m -> 
+--                  safeDiv m n))
+
+-- Eval using do notation
+eval :: Expr -> Maybe Int
+eval (Val n) = return n
+eval (Div x y) = do n <- eval                                                       sdx
+                    m <- eval y 
+                    safeDiv n m
+
+    
+-- m >>= f = case m of 
+--     Nothing -> Nothing
+--     Just x -> f x
+
+safeDiv :: Int -> Int -> Maybe Int
+safeDiv x y = if x == 0 then Nothing else Just (div x y)
+
+-- Maybe type constructor has two Monadic functions available
+-- return takes any value and converts to a maybe value. Gives a bridge between pure and impure worlds. 
+-- >>= allows sequencing. Give this something that can fail, and a function for if it succeeds. 
+
+-- Same idea works for other effects (IO, mutable states, non-determinism). Gives a uniform framework for programming with effects.
+-- Supports pure programming with effects.
+-- Use of effects is implicit in types
+-- Functions that work for any effect. 
